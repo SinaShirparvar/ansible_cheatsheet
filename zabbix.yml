@@ -1,0 +1,22 @@
+ - hosts: all
+    #  vars:
+    #  zabbix_server: " "
+
+    tasks:
+      - name: check centos distro version is ok ?
+        meta: end_host
+        when:
+          - ansible_facts['distribution'] == "Ubuntu"
+          - ansible_facts['distribution_major_version'] == '20.04'
+        result: register
+
+      - name: Installing the Zabbix Agent
+        yum:
+          name: zabbix-agent
+          state: latest
+
+      - name: Starting the Zabbix Agent
+        service:
+          name: zabbix-agent
+          state: started
+          enabled: yes
